@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 //实时监控流量类
 public class Update extends TimerTask
 {
@@ -21,6 +22,7 @@ public class Update extends TimerTask
 	SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
 	ResultSet res;
 	Second dbc = new Second();
+	String accou,mused,mused1;
 	public Update(Flow flow)
 	{
 		this.flow=flow;
@@ -31,7 +33,7 @@ public class Update extends TimerTask
 			//格式化时间
 			Date time = new Date(System.currentTimeMillis());
 			str = format.format(time);
-			
+
 			DecimalFormat df = new DecimalFormat("#0.00");
 			URL url = new URL("http://192.168.31.4:8080/");
 			//打开URL 
@@ -45,37 +47,41 @@ public class Update extends TimerTask
 			{
 				sb.append(line);//asp页面打印的内容，注意是整个页面内容，包括HTML标签
 			}
-			String acc=sb.substring(2896,2922);//Used Bytes
-			String stacc=sb.substring(2550,2580);//Account
-			String total = sb.substring(3248,3280);//Total Flow
 
-			int numm=stacc.indexOf(">");
-			int num=stacc.indexOf("<");
-			String accou=stacc.substring(numm+1,num);
-
-			int num1 = sb.indexOf("Used bytes");
-			String account= sb.substring(num1,num1+10);
-
-			String regEx="[^0-9]";   
-			Pattern p = Pattern.compile(regEx);   
-			Matcher m1 = p.matcher(acc);
-			Matcher m2 = p.matcher(total);
-			String mrp1=m1.replaceAll("").trim();
-			String mrp2=m2.replaceAll("").trim();
-			double usedflow1=Double.parseDouble(mrp1);
-			double usedflow2=Double.parseDouble(mrp2);
-			String mused=df.format(usedflow1/(1024*1024));
-			String mused1=df.format(usedflow2/(1024*1024));
-			flow.l5.setText(accou);flow.l6.setText(mused);flow.l7.setText(mused1);
-			//用户联网状态
-			if (account.equals("Used bytes"))
+			if (sb.toString().contains("Used bytes"))
 			{
+				String acc=sb.substring(2896,2922);//Used Bytes
+				String stacc=sb.substring(2550,2580);//Account
+				String total = sb.substring(3248,3280);//Total Flow
+
+				int numm=stacc.indexOf(">");
+				int num=stacc.indexOf("<");
+				accou=stacc.substring(numm+1,num);
+				/*
+				 * 正则表达式提取已使用流量数据和总流量数据
+				 */
+				String regEx="[^0-9]";   
+				Pattern p = Pattern.compile(regEx);   
+				Matcher m1 = p.matcher(acc);
+				Matcher m2 = p.matcher(total);
+				String mrp1=m1.replaceAll("").trim();
+				String mrp2=m2.replaceAll("").trim();
+				double usedflow1=Double.parseDouble(mrp1);
+				double usedflow2=Double.parseDouble(mrp2);
+				mused=df.format(usedflow1/(1024*1024));
+				mused1=df.format(usedflow2/(1024*1024));
+				flow.l5.setText(accou);flow.l6.setText(mused);flow.l7.setText(mused1);
 				flow.la4.setText(accou+"------Connected------");
+				flow.la9.setText("");//Clear the warning 
 			}
+		
 			else 
 			{
 				flow.la4.setText("You have logged out");
-				flow.la5.setText("");
+				flow.l5.setText("");//set username to null
+				flow.l6.setText("");//set used flow to 
+				flow.l7.setText("");//set total flow to null
+				flow.la5.setText("");//set tips to null
 			}
 
 			//判断流量是否超过指定额度流量	
@@ -84,19 +90,24 @@ public class Update extends TimerTask
 				flow.la5.setForeground(Color.red);
 				flow.la5.setText("Red Warning :"+accou+"的账号已经超过额定流量,您还可使用 ："+df.format(Double.parseDouble(mused1)-Double.parseDouble(mused))+"M");
 			}
-			else 
+			/*
+			 * 没有超过额定值且显示不为空才显示提示
+			 */
+			else if (!flow.l5.getText().equals("")&&Double.parseDouble(flow.l6.getText())<Double.parseDouble(flow.t4.getText()))
 			{
 				flow.la5.setForeground(Color.black);
 				flow.la5.setText(accou+"账号流量在指定范围内，请放心使用");
 			}
-			//判断时间,自动退出
-			if (str.contains("23:58:0"))
-			{
-				flow.la8.setText("系统当前已断网,系统正在为您自动退出…………");
-				System.exit(0);
-			}
 		}	
 		catch (Exception e)
-		{}
+		{
+			System.out.println("Empty");
+			flow.la9.setText("亲，您的网络异常！请检查诸如:您的网线松动、无WIFI信号等网络异常.");
+			flow.la4.setText("You have logged out");
+			flow.l5.setText("");//set username to null
+			flow.l6.setText("");//set used flow to 
+			flow.l7.setText("");//set total flow to null
+			flow.la5.setText("");//set tips to null
+		}
 	}
 }

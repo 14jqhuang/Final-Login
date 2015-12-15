@@ -43,7 +43,7 @@ public class Flow extends JPanel implements FocusListener,ItemListener
 	ResultSetMetaData rsmd;
 	JPanel npanel,mpanel,spanel;
 	JButton button,button1,exit,trip,setDefault,clear,handset,handdel;
-	JLabel la1,la2,la3,la4,la5,la6,la7,la8;//la7——specialized for account,la8——specialized for warning
+	JLabel la1,la2,la3,la4,la5,la6,la7,la8,la9;//la7——specialized for account,la8——specialized for warning
 	JComboBox<String> user;
 	JTextField t4;
 	JPasswordField pw;
@@ -132,6 +132,7 @@ public class Flow extends JPanel implements FocusListener,ItemListener
 		la6= new JLabel("",JLabel.CENTER);la6.setFont(new Font("宋体",Font.BOLD,19));
 		la7= new JLabel("",JLabel.CENTER);la7.setFont(new Font("宋体",Font.BOLD,25));
 		la8= new JLabel("",JLabel.LEFT);la8.setFont(new Font("宋体",Font.BOLD,15));
+		la9= new JLabel("",JLabel.CENTER);la8.setFont(new Font("宋体",Font.BOLD,20));
 		
 		//账号密码对应
 		map = new HashMap<String,String>();
@@ -182,14 +183,17 @@ public class Flow extends JPanel implements FocusListener,ItemListener
 		npanel.add(l7);npanel.add(exit);npanel.add(trip);npanel.add(l4);
 		npanel.add(t4);
 		npanel.setLayout(new GridLayout(4,4));
-		mpanel.add(la4);mpanel.add(la5);
-		mpanel.setLayout(new GridLayout(2,1));
+		mpanel.add(la4);mpanel.add(la5);mpanel.add(la9);
+		mpanel.setLayout(new GridLayout(3,1));
 		//spanel.setLayout(mgr);
 		la3.setPreferredSize(new Dimension(500, 30));
 		//la8单独一行显示
 		la8.setPreferredSize(new Dimension(550, 20));
 		//设置la8颜色为红色
 		la8.setForeground(Color.RED);
+		//la8单独一行显示
+		//设置la9颜色为红色
+		la9.setForeground(Color.RED);
 		//自定义组件大小
 		//spanel.setLayout(new FlowLayout());
 		setDefault.setPreferredSize(new Dimension(155,30));
