@@ -1,12 +1,8 @@
 package login;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
@@ -15,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.*;
+
+import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
 
 public class AddAccount extends JPanel implements ActionListener
 {
@@ -26,15 +24,21 @@ public class AddAccount extends JPanel implements ActionListener
 	JLabel label1,label2,label3;
 	JTextField addtext1;
 	JPasswordField addtext2;
-	
 	JButton addbutton;
 	int clicknumber=0;
-	DataBaseconnection dbc=new DataBaseconnection();
+	Second dbc=new Second();
 	ResultSet res,res1,res2;
 	int id=0;//自增
 	
 	public AddAccount()
 	{
+		UIManager.put("RootPane.setupButtonVisible",false); //不显示设置按钮
+		BeautyEyeLNFHelper.frameBorderStyle = BeautyEyeLNFHelper.FrameBorderStyle.translucencyAppleLike;
+		try {
+			org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		panel1 = new JPanel();
 		panel2 = new JPanel();
 		panel1.setPreferredSize(new Dimension(500,200));
@@ -45,7 +49,7 @@ public class AddAccount extends JPanel implements ActionListener
 		label3.setFont(new Font("宋体",Font.BOLD,25));
 		addtext1=new JTextField(10);
 		addtext2=new JPasswordField(10);
-		addbutton=new DesignButton("添加");
+		addbutton=new JButton("添加");
 		
 		panel1.add(label3);
 		panel2.setPreferredSize(new Dimension(400, 100));
@@ -65,12 +69,12 @@ public class AddAccount extends JPanel implements ActionListener
 	{
 		if (e.getActionCommand()=="添加")
 		{
-			//首次使用，设置id为11，确保自由选择账号
+			//首次使用，设置id为10001，确保自由选择账号
 			res2 = dbc.executeQuery("select * from stuacc");
 			try {
 				if (res2.next()==false)
 				{
-					id=10;
+					id=0;
 				}
 			} catch (SQLException e3) {
 				e3.printStackTrace();
@@ -94,7 +98,7 @@ public class AddAccount extends JPanel implements ActionListener
 
 					else 
 					{
-						res=dbc.executeQuery("select * from stuacc");
+						res=dbc.executeQuery("select * from stuacc order by id");
 						try 
 						{
 							while (res.next())
@@ -102,9 +106,9 @@ public class AddAccount extends JPanel implements ActionListener
 								//遍历到最后
 								id=Integer.parseInt(res.getString(3));
 							}
-							dbc.executeUpdate("insert into stuacc values('"+addtext1.getText()+"',"
-									+ "'"+addtext2.getText()+"','"+(id+1)+"','')");
-
+							dbc.executeUpdate("insert into stuacc(account,password,id,defaultacc) values('"+addtext1.getText()+"',"
+									+ "'"+addtext2.getText()+"',"+(id+1)+",' ')");//bug所在（''表示字符，SQL语句中""无实际意义）
+							System.out.println(id+1);
 							JOptionPane.showMessageDialog(null,"添加成功！","已保存",JOptionPane.OK_OPTION);
 						} 
 						catch (SQLException e1)

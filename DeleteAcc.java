@@ -2,30 +2,40 @@ package login;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Vector;
-
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+
+import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
 
 public class DeleteAcc extends JPanel implements ActionListener
 {	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	JPanel panel2,panel3;
 	JLabel deAcc;
 	JTextField deText;
 	JButton deBu,debuall,deinput;
-	DataBaseconnection dbc=new DataBaseconnection();
+	Second dbc=new Second();
 	ResultSet res;
 	public DeleteAcc()
 	{
+		UIManager.put("RootPane.setupButtonVisible",false); //不显示设置按钮
+		BeautyEyeLNFHelper.frameBorderStyle = BeautyEyeLNFHelper.FrameBorderStyle.translucencyAppleLike;
+		try {
+			org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		//panel1= new JPanel();
 		panel2= new JPanel();
 		panel3= new JPanel();
@@ -36,9 +46,9 @@ public class DeleteAcc extends JPanel implements ActionListener
 		//label=new JLabel(new ImageIcon("E:/images/qq1.gif"));
 		deAcc=new JLabel("请输入您要删除的账号名 ：",JLabel.RIGHT);
 		deText=new JTextField(10);
-		deBu=new DesignButton("确定");
-		debuall=new DesignButton("删除所有");
-		deinput=new DesignButton("删除输入历史");
+		deBu=new JButton("确定");
+		debuall=new JButton("删除所有");
+		deinput=new JButton("删除输入历史");
 		//panel1.add(label);
 		panel2.add(deAcc);panel2.add(deText);panel2.add(deBu);
 		panel3.add(debuall);

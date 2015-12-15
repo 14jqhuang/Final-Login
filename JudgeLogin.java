@@ -8,8 +8,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.swing.JOptionPane;
-
 public class JudgeLogin 
 {
 	String temp1;

@@ -38,14 +38,13 @@ public class TaskSelection extends TimerTask
 							 }
 							 flow.la8.setText(""+flow.nameset+" 已经更改密码啦！！！或者账号无效");
 						 }
-						 //flow.trip.setEnabled(false);
 					 }
 					 catch (Exception e) 
 					 {
 						e.printStackTrace();
 					 }
 				 }
-				if ((Double.parseDouble(flow.l6.getText())>=Double.parseDouble(flow.t4.getText()))&&flow.list.size()!=0)
+				 else if ((Double.parseDouble(flow.l6.getText())>=Double.parseDouble(flow.t4.getText()))&&flow.list.size()!=0)
 				{
 					ser5.schedule(new AutoLogout(flow),0,TimeUnit.MILLISECONDS);
 					Thread.sleep(4000);

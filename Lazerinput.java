@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 public class Lazerinput
 {
-	DataBaseconnection dbc= new DataBaseconnection();
+	Second dbc= new Second();
 	ResultSet res;
 	public Lazerinput(String user, String pass)
 	{

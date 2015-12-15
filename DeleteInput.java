@@ -21,7 +21,7 @@ public class DeleteInput extends JFrame implements ActionListener
 	JTextField jtf;
 	JButton jb;
 	JLabel label1;
-	DataBaseconnection dbc=new DataBaseconnection();
+	Second dbc=new Second();
 	ResultSet res,res1;
 	Flow flow;
 	public DeleteInput(Flow flow)
@@ -36,8 +36,8 @@ public class DeleteInput extends JFrame implements ActionListener
 		add(jb);
 		jb.addActionListener(this);
 		setVisible(true);
-		setBounds(500,200,100,150);
-		
+		setBounds(500,200,200,150);
+		setOpacity(1);
 	}
 	public void actionPerformed(ActionEvent e) 
 	{

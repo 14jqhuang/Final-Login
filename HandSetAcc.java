@@ -18,7 +18,7 @@ public class HandSetAcc extends JFrame implements ActionListener
 	JTextField jtf;
 	JButton jb;
 	JLabel label1;
-	DataBaseconnection dbc=new DataBaseconnection();
+	Second dbc=new Second();
 	ResultSet res;
 	Flow flow;
 	public HandSetAcc(Flow flow)
@@ -33,14 +33,14 @@ public class HandSetAcc extends JFrame implements ActionListener
 		add(jb);
 		jb.addActionListener(this);
 		setVisible(true);
-		setBounds(500,200,100,150);
+		setBounds(500,200,200,150);
 		
 	}
 	public void actionPerformed(ActionEvent e) 
 	{
 		if (e.getSource()==jb)
 		{
-			SetDefaultAcc sDA=new SetDefaultAcc(jtf.getText());
+			SetDefaultAcc sDA=new SetDefaultAcc(jtf.getText(),flow);
 			Thread t = new Thread(sDA);
 			t.start();
 			setVisible(false);

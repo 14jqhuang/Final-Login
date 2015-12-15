@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -24,10 +23,10 @@ public class CorrectAcc extends JPanel implements ActionListener
 	JLabel corr,toCorr,orilabel,oripassword;
 	JTextField corrText,acc;
 	JPasswordField jp;
-	JButton sure1,sure2,back;
+	JButton sure1,sure2;
 	JPanel npanel,spanel;
-	DataBaseconnection dbc=new DataBaseconnection();
-	ResultSet res;
+	Second dbc=new Second();
+	ResultSet res,res1;
 	String id="middle";//记录账号位置,初始化
 	
 	public CorrectAcc()
@@ -37,11 +36,11 @@ public class CorrectAcc extends JPanel implements ActionListener
 		
 		//实例化
 		corr=new JLabel("请输入您要修改的账号 :",JLabel.CENTER);
-		toCorr=new JLabel("请在下面修改，然后点击确定即可：",JLabel.CENTER);
+		toCorr=new JLabel("亲^_^请在下面修改，然后点击确定即可——也可以直接输入修改^_^",JLabel.CENTER);
 		orilabel=new JLabel("账号 :",JLabel.CENTER);oripassword=new JLabel("密码 :",JLabel.CENTER);
 		corrText=new JTextField(10);acc=new JTextField(10);
 		jp=new JPasswordField(10);
-		sure1=new DesignButton("确定");sure2=new DesignButton("确定修改");
+		sure1=new JButton("确定");sure2=new JButton("确定修改");
 		
 		//add to contailor
 		npanel.add(corr);npanel.add(corrText);npanel.add(sure1);
@@ -80,7 +79,6 @@ public class CorrectAcc extends JPanel implements ActionListener
 				try {
 					if (res.next())
 					{
-						id=res.getString(3);
 						acc.setText(res.getString(1));jp.setText(res.getString(2));
 					}
 					else 
@@ -97,17 +95,23 @@ public class CorrectAcc extends JPanel implements ActionListener
 		
 		else if (e.getSource()==sure2)
 		{
-			//输入不能为空，注意==和equals()的区别：equals比较的是对象的值，==用来普安短是否为同一对象
-			if (corrText.getText().equals(""))
+			res1=dbc.executeQuery("select * from stuacc where account='"+acc.getText()+"'");
+			try {
+				if (res1.next())
+				{
+					id = res1.getString(3);
+					dbc.executeUpdate("update stuacc set account='"+acc.getText()+"',password='"+jp.getText()+"' where id="+id+"");
+					JOptionPane.showMessageDialog(null,"修改成功！","已保存",JOptionPane.OK_OPTION);
+					corrText.setText("");acc.setText("");jp.setText("");
+				}
+				else 
+				{
+					JOptionPane.showMessageDialog(null,"Sorry!暂无该账号的信息，请确认好后重新输入","Wrong Usernumber",JOptionPane.ERROR_MESSAGE);
+				}
+			} 
+			catch (SQLException e1) 
 			{
-				JOptionPane.showMessageDialog(null, "!!!亲!!!您还没输入您要修改的账号哦");
-			}
-			else
-			{
-				System.out.println(id);
-				dbc.executeUpdate("update stuacc set account='"+acc.getText()+"',password='"+jp.getText()+"' where id='"+id+"'");
-				JOptionPane.showMessageDialog(null,"修改成功！","已保存",JOptionPane.OK_OPTION);
-				corrText.setText("");acc.setText("");jp.setText("");
+				e1.printStackTrace();
 			}
 		}
 	}

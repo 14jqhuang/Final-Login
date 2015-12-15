@@ -12,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.JTextPane;
 //实时监控流量类
 public class Update extends TimerTask
 {
@@ -21,8 +20,7 @@ public class Update extends TimerTask
 	String str = null;
 	SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
 	ResultSet res;
-	DataBaseconnection dbc = new DataBaseconnection();
-	JTextPane jtp = new JTextPane();
+	Second dbc = new Second();
 	public Update(Flow flow)
 	{
 		this.flow=flow;
@@ -49,7 +47,7 @@ public class Update extends TimerTask
 			}
 			String acc=sb.substring(2896,2922);//Used Bytes
 			String stacc=sb.substring(2550,2580);//Account
-			String total = sb.substring(3250,3280);//Total Flow
+			String total = sb.substring(3248,3280);//Total Flow
 
 			int numm=stacc.indexOf(">");
 			int num=stacc.indexOf("<");
@@ -68,7 +66,6 @@ public class Update extends TimerTask
 			double usedflow2=Double.parseDouble(mrp2);
 			String mused=df.format(usedflow1/(1024*1024));
 			String mused1=df.format(usedflow2/(1024*1024));
-
 			flow.l5.setText(accou);flow.l6.setText(mused);flow.l7.setText(mused1);
 			//用户联网状态
 			if (account.equals("Used bytes"))
@@ -92,21 +89,8 @@ public class Update extends TimerTask
 				flow.la5.setForeground(Color.black);
 				flow.la5.setText(accou+"账号流量在指定范围内，请放心使用");
 			}
-			//显示默认登陆账号
-			res=dbc.executeQuery("select * from stuacc where defaultacc='yes'");
-			if (res.next())
-			{
-				flow.la7.setForeground(Color.magenta);
-				flow.la6.setText("当前的默认的自动登陆账号为 ： ");
-				flow.la7.setText(res.getString(1));
-			}
-			else 
-			{
-				//flow.la6.setText("当前无默认登陆账号，亲，设置默认登陆账号下次可方便快速登陆哦！！！");
-				flow.la7.setText("");
-			}
 			//判断时间,自动退出
-			if (str.contains("23:58:00"))
+			if (str.contains("23:58:0"))
 			{
 				flow.la8.setText("系统当前已断网,系统正在为您自动退出…………");
 				System.exit(0);

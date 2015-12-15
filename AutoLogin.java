@@ -7,14 +7,12 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.util.TimerTask;
 
-import javax.swing.JOptionPane;
-
-	//自动切换Login部分
+//自动切换Login部分
 public class AutoLogin extends TimerTask
 {
 	Flow flow;
 	ResultSet res;
-	DataBaseconnection dbc = new DataBaseconnection();
+	Second dbc = new Second();
 	public AutoLogin(Flow flow)
 	{
 		this.flow = flow;
@@ -22,7 +20,7 @@ public class AutoLogin extends TimerTask
 		public void run()
 		{
 				flow.index=(String) flow.list.get(0);
-				res=dbc.executeQuery("select * from StuAcc where id='"+flow.index+"'");//Pay attention to the blank(空格)
+				res=dbc.executeQuery("select * from StuAcc where id="+flow.index+"");//Pay attention to the blank(空格)
 				try 
 				{
 					while (res.next())
@@ -67,22 +65,21 @@ public class AutoLogin extends TimerTask
 					//JOptionPane.showMessageDialog(null, "！！！"+flow.acc+" 已经更改密码啦！！！或者该账号无效！！！");
 					//Flush the web page
 					try {
-						Thread.sleep(3000);
+						Thread.sleep(3000);//时间总是bug之所在
 					} catch (InterruptedException e1) {
 						e1.printStackTrace();
 					}
 					flow.index=(String) flow.list.get(0);
-					res=dbc.executeQuery("select * from stuacc where id='"+flow.index+"'");//Pay attention to the blank(空格)
+					res=dbc.executeQuery("select * from stuacc where id="+flow.index+"");//Pay attention to the blank(空格)
 					try 
 					{
 						while (res.next())
 					  {		
 							flow.acc=res.getString(1);
 							flow.pass=res.getString(2);
-						//	System.out.println(flow.acc);
+							System.out.println(flow.acc);
 					  }
 						new Login(flow.acc,flow.pass);
-						
 						
 					}catch (Exception ex){ex.printStackTrace();}
 					try {

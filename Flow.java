@@ -3,7 +3,6 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
@@ -26,6 +25,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.swing.*;
+import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
+import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI;
 
 public class Flow extends JPanel implements FocusListener,ItemListener
 {
@@ -37,7 +38,7 @@ public class Flow extends JPanel implements FocusListener,ItemListener
 	int id=0;
 	int clicknum=0;
 	int closePane=0;
-	DataBaseconnection dbc=new DataBaseconnection();
+	Second dbc=new Second();
 	ResultSet res;
 	ResultSetMetaData rsmd;
 	JPanel npanel,mpanel,spanel;
@@ -62,8 +63,27 @@ public class Flow extends JPanel implements FocusListener,ItemListener
 	int temp2=0;
 	
 	public Flow()
-	{
-		npanel= new JPanel(){  
+	{	
+		UIManager.put("RootPane.setupButtonVisible",false); //不显示设置按钮
+		BeautyEyeLNFHelper.frameBorderStyle = BeautyEyeLNFHelper.FrameBorderStyle.translucencyAppleLike;
+		try {
+			org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		npanel= new JPanel()
+		{  
+			private static final long serialVersionUID = 1L;  
+			protected void paintComponent(Graphics g) {  
+				Graphics2D g2 = (Graphics2D) g;  
+				super.paintComponent(g);  
+				// 绘制渐变  
+				g2.setPaint(new GradientPaint(0, 0, new Color(255, 149, 100), getWidth(),  getHeight(), new Color(255, 212, 100)));  
+				g2.fillRect(0, 0, getWidth(), getHeight());  
+			}  
+		}; 
+		spanel= new JPanel()
+		{  
 			private static final long serialVersionUID = 1L;  
 
 			protected void paintComponent(Graphics g) {  
@@ -74,18 +94,8 @@ public class Flow extends JPanel implements FocusListener,ItemListener
 				g2.fillRect(0, 0, getWidth(), getHeight());  
 			}  
 		}; 
-		spanel= new JPanel(){  
-			private static final long serialVersionUID = 1L;  
-
-			protected void paintComponent(Graphics g) {  
-				Graphics2D g2 = (Graphics2D) g;  
-				super.paintComponent(g);  
-				// 绘制渐变  
-				g2.setPaint(new GradientPaint(0, 0, new Color(255, 149, 100), getWidth(),  getHeight(), new Color(255, 212, 100)));  
-				g2.fillRect(0, 0, getWidth(), getHeight());  
-			}  
-		}; 
-		mpanel= new JPanel(){  
+		mpanel= new JPanel()
+		{  
 			private static final long serialVersionUID = 1L;  
 
 			protected void paintComponent(Graphics g) {  
@@ -97,16 +107,22 @@ public class Flow extends JPanel implements FocusListener,ItemListener
 				g2.fillRect(0, 0, getWidth(), getHeight());  
 			}  
 		}; 
-		button=new DesignButton("Summit");
-		
-		button1=new DesignButton("Logout");
-		trip=new DesignButton("Switch");
-		exit=new DesignButton("Exit");
-		setDefault=new DesignButton("设置当前为默认账号");
-		clear=new DesignButton("清空输入框");
-		handset=new DesignButton("自由设置默认登陆账号");
-		handdel=new DesignButton("删除某项输入");
-		
+		button=new JButton("Summit");
+		button.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.green));
+		button1=new JButton("Logout");
+		button1.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.red));
+		trip=new JButton("Switch");
+		trip.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.lightBlue));
+		exit=new JButton("Exit");
+		exit.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.green));
+		setDefault=new JButton("设置当前为默认账号");
+		setDefault.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.green));
+		clear=new JButton("清空输入框");
+		clear.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.green));
+		handset=new JButton("自由设置默认登陆账号");
+		handset.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.green));
+		handdel=new JButton("删除某项输入");
+		handdel.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.green));		
 		la1=new JLabel("Username : ",JLabel.CENTER);
 		la2=new JLabel("Password : ",JLabel.CENTER);
 		la3=new JLabel("设置默认登陆账号，以便下次自动登陆轻松上网",JLabel.CENTER);
@@ -150,6 +166,16 @@ public class Flow extends JPanel implements FocusListener,ItemListener
 	}
 	public void init()
 	{
+//		UIManager.put("RootPane.setupButtonVisible",false); //不显示设置按钮
+//		BeautyEyeLNFHelper.translucencyAtFrameInactive = true;
+//		BeautyEyeLNFHelper.frameBorderStyle = FrameBorderStyle.translucencyAppleLike;
+//		try {
+//			BeautyEyeLNFHelper.launchBeautyEyeLNF();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		UIManager.put("TabbedPane.tabAreaInsets"
+//			    , new javax.swing.plaf.InsetsUIResource(0, 0, 0, 0)); //tab 的左缩进
 		npanel.add(la1);npanel.add(user);npanel.add(l1);npanel.add(l5);
 		npanel.add(la2);npanel.add(pw);npanel.add(l2);npanel.add(l6);
 		npanel.add(button);npanel.add(button1);npanel.add(l3);
